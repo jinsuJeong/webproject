@@ -1,0 +1,20 @@
+package ex_been;
+import java.sql.*;
+
+public class student_DAO {
+	public void insertStudent(student_VO item) throws Exception {
+		String no = item.getNo();
+		String name = item.getName();
+
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","201550057","201550057");
+
+		PreparedStatement pstmt = conn.prepareStatement("insert into student values(?,?)");
+		pstmt.setString(1,no);
+		pstmt.setString(2,name);
+		pstmt.executeUpdate();
+
+		pstmt.close();
+		conn.close();
+	}
+}
