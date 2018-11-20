@@ -24,7 +24,7 @@ public class MemberController {
 	public void createGET() throws Exception {
 	}
 	
-	@RequestMapping(value = "/createPost", method = RequestMethod.POST)
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String createPOST(MemberVO memberVO) throws Exception {
 		memberService.createMember(memberVO);
 		return "redirect:/board/list";
@@ -35,10 +35,16 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/loginPost", method = RequestMethod.POST)
-	public String loginPOST(LogonDTO logonDTO, HttpSession httpSession, Model model) throws Exception {
+	public void loginPOST(LogonDTO logonDTO, HttpSession httpSession, Model model) throws Exception {
 		MemberVO memberVO = memberService.readMember(logonDTO);
-		if (memberVO==null) { return "/member/login"; }
+		if (memberVO==null) { return; }
 		model.addAttribute("memberVO", memberVO);
-		return "redirect:/board/list";
+	}
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public void logout(HttpSession httpSession) {
+		if (httpSession.getAttribute("login") != null) {
+			httpSession.removeAttribute("login");
+			httpSession.invalidate();
+		}
 	}
 }

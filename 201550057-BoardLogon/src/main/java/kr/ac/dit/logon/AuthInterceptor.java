@@ -13,6 +13,17 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		HttpSession httpSession = httpServletRequest.getSession();
 
 		if(httpSession.getAttribute("login")==null) {
+			String uri = httpServletRequest.getRequestURI();
+			String query = httpServletRequest.getQueryString();
+
+			if (query == null || query.equals("null")) {
+				query = "";
+			} else {
+				uri += "?" + query;
+			}
+			if (httpServletRequest.getMethod().equals("GET")) {
+				httpSession.setAttribute("saveDirect", uri );
+			}
 			httpServletResponse.sendRedirect("/member/login");
 			return false;
 		}
